@@ -1,0 +1,26 @@
+<h1 align="center">INDEX</h1>
+
+<% @articles.each do |article| %>
+  <div class="row">
+    <div class="col-xs-8 col-xs-offset-2">
+      <div class="well well-lg">
+        <div class="article-title">
+          <%= link_to article.title, article_path(article) %>
+        </div>
+        <div class="article-title">
+          <%= article.description %>
+        </div>
+        <div class="article-body">
+          <%= truncate(article.content, length: 50) %>
+        </div>
+
+        <div class="article-actions">
+          <%= link_to "Edit article", edit_article_path(article), class: "btn btn-xs btn-primary" %>
+          <%= link_to "Delete article", article_path(article), method: :delete, data: {confirm: "Delete?"},
+                                                                class: "btn btn-xs btn-danger" %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<% end %>
