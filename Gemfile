@@ -1,3 +1,5 @@
+ruby '2.5.1'
+
 source 'https://rubygems.org'
 
 git_source(:github) do |repo_name|
@@ -8,6 +10,12 @@ end
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.1.6', '>= 5.1.6.1'
+
+gem 'bcrypt', '~> 3.1.7'
+
+gem 'will_paginate', '~> 3.1.0'
+
+gem 'bootstrap-will_paginate', '~> 1.0.0'
 # Use postgresql as the database for Active Record
 gem 'pg', '>= 0.18', '< 2.0'
 # Use Puma as the app server
@@ -48,6 +56,7 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
+  gem 'rubocop'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
