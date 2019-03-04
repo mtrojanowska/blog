@@ -18,10 +18,12 @@
   <h4 class="center description"><strong>Content</strong></h4>
     <%= simple_format(@article.content) %>
 
-  <div class="article-actions">
-    <%= link_to "Edit article", edit_article_path(@article), class: "btn btn-xs btn-primary" %>
-    <%= link_to "Delete article", article_path(@article), method: :delete, data: {confirm: "Delete?"},
-                                                          class: "btn btn-xs btn-danger" %>
-    <%= link_to "All articles", articles_path, class: "btn btn-xs btn-success" %>
-  </div>
+  <% if logged_in? && current_user == @article.user %>
+    <div class="article-actions">
+      <%= link_to "Edit article", edit_article_path(@article), class: "btn btn-xs btn-primary" %>
+      <%= link_to "Delete article", article_path(@article), method: :delete, data: {confirm: "Delete?"},
+                                                            class: "btn btn-xs btn-danger" %>
+  <% end %>
+      <%= link_to "All articles", articles_path, class: "btn btn-xs btn-success" %>
+    </div>
 </div>
