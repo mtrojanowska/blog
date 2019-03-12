@@ -7,6 +7,8 @@ class ArticlesController < ApplicationController
 
   def index
     @articles = Article.paginate(page: params[:page], per_page: 5)
+    # raise session["user_id"].inspect
+    # raise session["session_id"].inspect
   end
 
   def new
