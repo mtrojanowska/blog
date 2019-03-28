@@ -1,27 +1,71 @@
 require 'rails_helper'
 
-
 RSpec.describe User, type: :model do
-    context 'validation tests' do
+    context 'relation test' do
+      it 'checks has_many relation' do
+          user = User.create(username: 'Frog', email: 'frog@gmail.com', password: 'malutka1')
+          article1 = Article.create(title: "Title", content: "Some contentafhkjdjkhjhljhlkhkjlhkjhlhfkhfa", user_id: user.id)
+          article2 = Article.create(title: "Title1", content: "Some contejfahljhfdhfajdhfljdshflkjhdsflajh", user_id: user.id)
+          expect(user.articles).to eq([article1, article2])
+      end
+    end
+
+     context 'validation tests' do
       it 'checks username presence' do
-        user = User.new(email: 'frog@example.com', password: 'malutka1').save
-        expect(user).to eq(false)
+        user = User.new(username: 'Frog', password: 'malutka1', email: 'frog@example.com')
+        username_validation = user.valid?
+        expect(username_validation).to be true
       end
 
-      it 'checks username length' do
-        user = User.new(username: 'Bo', email: 'bro@gmail.com',  password: 'malutka1').save
-        expect(user).to eq(false)
+      it 'checks username absence' do
+        user = User.new(username: '')
+        username_validation = user.valid?
+        expect(username_validation).to be false
+      end
+
+      it 'checks if the username is too short' do
+        user = User.new(username: 'Bo')
+        username_validation = user.valid?
+        expect(user.errors[:username]).to eq(["is too short (minimum is 3 characters)"])
       end
 
       it 'checks email presence' do
-        user = User.new(username: 'Frog', password: 'malutka1').save
-        expect(user).to eq(false)
+        user = User.new(email: '')
+        username_validation = user.valid?
+        expect(user.errors[:email].first).to eq("can't be blank")
+      end
+
+      it "passes when email is invalid" do
+        user = User.new(email: 'joh@doe')
+        username_validation = user.valid?
+        expect(user.errors[:email].last).to eq('is invalid')
+      end
+
+      it "checks the password presence" do
+        user = User.new(password: 'malutka1')
+        user_validation_result = user.valid?
+        expect(user_validation_result).to eq(false)
+      end
+
+      it "checks the password absence" do
+        user = User.new(username: 'Frog', email: 'frog@gmail.com')
+        user_validation_result = user.valid?
+        expect(user_validation_result).to eq(false)
+
+      end
+      it 'checks uniqueness' do
+        user1 = User.create(username: 'Frog', password: 'malutka1', email: 'frog@example.com')
+        user2 = User.create(username: 'frog', password: 'malutka1', email: 'grog@example.com')
+        expect(user2.errors[:username].first).to eq("has already been taken")
+        # expect(user2.persisted?).to eq(false)
       end
 
 
-      it 'should save the user' do
-        user = User.new(username: 'Frog', email: 'frog@gmail.com', password: 'malutka1').save
-        expect(user).to eq(true)
+      it 'should create a valid user' do
+        user = User.new(username: 'Frog', email: 'frog@gmail.com', password: 'malutka1')
+        user_validation_result = user.valid?
+        expect(user_validation_result).to eq(true)
       end
-    end
+
   end
+end
