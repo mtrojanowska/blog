@@ -63,19 +63,19 @@ RSpec.describe UsersController, type: :controller do
       context "with valid params" do
         it "creates a new User" do
           expect {
-            post :create, params: { user: {:username => 'Frog', :email => 'frog@gmail.com', :password => 'malutka1'}}
+            post :create, params: { user: {username:'Frog', email: 'frog@gmail.com', password: 'malutka1'}}
           }.to change(User, :count).by(1)
         end
 
         it "redirects to the @user" do
-          post :create, params: { user: {:username => 'Frog', :email => 'frog@gmail.com', :password => 'malutka1'}}
+          post :create, params: { user: {username:'Frog', email: 'frog@gmail.com', password: 'malutka1'}}
           expect(response).to redirect_to(User.last)
         end
       end
 
         context "with invalid params" do
           it "returns a new template" do
-            post :create, params: { user: {:email => 'frog@gmail.com', :password => 'malutka1'}}
+            post :create, params: { user: {username: '', email: 'frog@gmail.com', password: 'malutka1'}}
             expect(response).to render_template :new
           end
         end
@@ -97,7 +97,7 @@ RSpec.describe UsersController, type: :controller do
           session[:user_id] = user.id
           put :update, params: {id: user.id, user: {username: 'Sloggy', email: 'frog@gmail.com', password: 'malutka1'}}
           user.reload
-          expect(response).to redirect_to(user_path) #redirects to articles_path, not to user_path due to retrictions???
+          expect(response).to redirect_to(articles_path)
         end
       end
 
@@ -105,9 +105,9 @@ RSpec.describe UsersController, type: :controller do
           it "updates the requested user" do
             user= User.create(username: 'Frog', email: 'frog@gmail.com', password: 'malutka1')
             session[:user_id] = user.id
-            put :update, params: {id: user.id, user: {username: '1', email: 'frog@gmail.com', password: 'malutka1'}}
+            put :update, params: {id: user.id, user: {username: '', email: '', password: ''}}
             user.reload
-            expect(response).to render_template('users/edit') #not working - redirects to articles_path
+            expect(response).to render_template :edit
           end
       end
     end

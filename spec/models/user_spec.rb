@@ -2,12 +2,11 @@ require 'rails_helper'
 
 RSpec.describe User, type: :model do
     context 'relation test' do
-      it 'checks has_many relation' do
-          user = User.create(username: 'Frog', email: 'frog@gmail.com', password: 'malutka1')
-          article1 = Article.create(title: "Title", content: "Some contentafhkjdjkhjhljhlkhkjlhkjhlhfkhfa", user_id: user.id)
-          article2 = Article.create(title: "Title1", content: "Some contejfahljhfdhfajdhfljdshflkjhdsflajh", user_id: user.id)
-          expect(user.articles).to eq([article1, article2])
-      end
+      it { is_expected.to have_many(:articles) }
+          # user = User.create(username: 'Frog', email: 'frog@gmail.com', password: 'malutka1')
+          # article1 = Article.create(title: "Title", content: "Some contentafhkjdjkhjhljhlkhkjlhkjhlhfkhfa", user_id: user.id)
+          # article2 = Article.create(title: "Title1", content: "Some contejfahljhfdhfajdhfljdshflkjhdsflajh", user_id: user.id)
+          # expect(user.articles).to eq([article1, article2])
     end
 
      context 'validation tests' do
@@ -29,7 +28,7 @@ RSpec.describe User, type: :model do
         expect(user.errors[:username]).to eq(["is too short (minimum is 3 characters)"])
       end
 
-      it 'checks email presence' do
+      it 'checks email absence' do
         user = User.new(email: '')
         username_validation = user.valid?
         expect(user.errors[:email].first).to eq("can't be blank")
@@ -42,17 +41,26 @@ RSpec.describe User, type: :model do
       end
 
       it "checks the password presence" do
-        user = User.new(password: 'malutka1')
+        user = User.new(username: 'Frog', password: 'malutka1', email: 'frog@example.com')
         user_validation_result = user.valid?
-        expect(user_validation_result).to eq(false)
+        expect(user_validation_result).to eq(true)
       end
 
       it "checks the password absence" do
         user = User.new(username: 'Frog', email: 'frog@gmail.com')
-        user_validation_result = user.valid?
-        expect(user_validation_result).to eq(false)
-
+        user.save
+        expect(user.persisted?).to eq(false)
+        # user_validation_result = user.valid?
+        # expect(user_validation_result).to eq(false)
+        # expect { user.save }.not_to change(User, :count)
       end
+
+     it "checks the password digest" do
+       user = User.create(username: 'Frog', password: 'malutka1', email: 'frog@example.com')
+       expect(user.password_digest).not_to eq(nil)
+    end
+
+
       it 'checks uniqueness' do
         user1 = User.create(username: 'Frog', password: 'malutka1', email: 'frog@example.com')
         user2 = User.create(username: 'frog', password: 'malutka1', email: 'grog@example.com')
@@ -63,8 +71,7 @@ RSpec.describe User, type: :model do
 
       it 'should create a valid user' do
         user = User.new(username: 'Frog', email: 'frog@gmail.com', password: 'malutka1')
-        user_validation_result = user.valid?
-        expect(user_validation_result).to eq(true)
+        expect { user.save }.to change(User, :count)
       end
 
   end
