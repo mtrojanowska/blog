@@ -50,6 +50,10 @@ group :development, :test do
   gem 'capybara', '~> 2.13'
   gem 'selenium-webdriver'
   gem 'rails-controller-testing'
+  gem 'pry-rails'
+  gem 'shoulda-matchers'
+  gem 'rails-controller-testing'
+
 end
 
 group :development do
