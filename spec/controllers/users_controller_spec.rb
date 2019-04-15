@@ -9,8 +9,7 @@ RSpec.describe UsersController, type: :controller do
       user2 = User.create(username: 'Grog', email: 'grog@gmail.com', password: 'malutka1')
       user3 = User.create(username: 'Smog', email: 'smog@gmail.com', password: 'malutka1')
       get :index
-
-      expect(assigns(:users)).to eq([user1, user2, user3, user4])
+      expect(assigns(:users)).to eq([user1, user2, user3])
     end
 
     it 'renders the index template' do
